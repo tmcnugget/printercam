@@ -7,8 +7,9 @@ body, html {
 }
 
 img {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover; /* Ensures the image fills the screen without distortion */
-    display: block;
+    display: block;      /* Makes centering with margin:auto work */
+    margin: auto;        /* Centers the image horizontally */
+    max-width: 50%;      /* Makes the image smaller (adjust as needed) */
+    height: auto;        /* Maintains aspect ratio */
+    transform: rotate(180deg) scaleX(-1); /* Flips the image */
 }
