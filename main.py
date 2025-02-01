@@ -24,6 +24,10 @@ def generate_frames():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 @app.route('/feed')
 def video_feed():
     return Response(generate_frames(),
