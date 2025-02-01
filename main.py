@@ -1,7 +1,7 @@
 from picamera2 import Picamera2
-import cv2
-from flask import Flask, render_template, request, jsonify, Response
-
+from flask import Flask, Response
+from PIL import Image
+import io
 
 picam2 = Picamera2()
 camera_config = picam2.create_preview_configuration()
@@ -12,15 +12,17 @@ app = Flask(__name__)
 
 def generate_frames():
     while True:
-        # Capture image from camera
+        # Capture image from camera as a numpy array
         frame = picam2.capture_array()
-        ret, jpeg = cv2.imencode('.jpg', frame)
-        if not ret:
-            continue
-        # MJPEG streaming response
-        frame = jpeg.tobytes()
+        # Convert the array to a PIL Image
+        img = Image.fromarray(frame)
+        # Save image to an in-memory bytes buffer as JPEG
+        buffer = io.BytesIO()
+        img.save(buffer, format="JPEG")
+        frame_bytes = buffer.getvalue()
+        # Yield the frame in MJPEG format
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
 @app.route('/feed')
 def video_feed():
