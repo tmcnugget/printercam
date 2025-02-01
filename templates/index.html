@@ -7,6 +7,6 @@
     <title>Printer Cam</title>
 </head>
 <body>
-  <img src="{{ url_for('video_feed') }}" width="640" height="480" />
+  <img src="{{ url_for('video_feed') }}" style="transform: rotate(180deg) scaleX(-1);" width="640" height="480" />
 </body>
 </html>
