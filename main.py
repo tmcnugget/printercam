@@ -15,7 +15,7 @@ def generate_frames():
         # Capture image from camera as a numpy array
         frame = picam2.capture_array()
         # Convert the array to a PIL Image
-        img = Image.fromarray(frame)
+        img = Image.fromarray(frame).convert("RGB")
         # Save image to an in-memory bytes buffer as JPEG
         buffer = io.BytesIO()
         img.save(buffer, format="JPEG")
