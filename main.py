@@ -33,5 +33,14 @@ def video_feed():
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/snapshot')
+def snapshot():
+    frame = picam2.capture_array()
+    img = Image.fromarray(frame).convert("RGB")
+    img_io = io.BytesIO()
+    img.save(img_io, format="JPEG")
+    img_io.seek(0)
+    return Response(img_io.getvalue(), mimetype='image/jpeg')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
